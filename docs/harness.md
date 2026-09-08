@@ -23,8 +23,10 @@ git checkout -b content/<slug>
 bash scripts/sync-vault.sh
 git add -A && git commit -m "..."
 git push -u origin content/<slug>
-gh pr create --base v5 --fill
+gh pr create --repo uruha/notes --base v5 --fill
 ```
+
+`--repo uruha/notes` は省略しないこと(理由は §5 参照)。
 
 CI（`PR Check`）がグリーンになったらマージ:
 
@@ -69,3 +71,4 @@ gh api -X PUT repos/uruha/notes/branches/v5/protection --input branch-protection
 - `pr-check.yaml`の`build`ジョブと、`gh-pages.yaml`の`build`ジョブは名前が同じ（"build"）。ただし前者は`pull_request`、後者は`push`トリガーなのでPRチェックの文脈では衝突しない。
 - リポジトリのデフォルトブランチは`main`ではなく`v5`（fork元の慣習に合わせている）。
 - Vault内の`Notes/`フォルダとGitHub Pagesの公開パス`/notes/`の名前が一致しているため、記事URLが`/notes/notes/<slug>`のように重複する（動作は正常）。
+- `uruha/notes`はGitHub上`jackyzha0/quartz`のforkとして登録されている。`gh`コマンドは`--repo`省略時、fork元(親リポジトリ`jackyzha0/quartz`)をPR/issueの対象にすることがある。ローカルでは`gh repo set-default uruha/notes`を設定済みだが、念のため`gh pr create`等は`--repo uruha/notes`を必ず明示すること(実際に誤ってupstreamにPRを作成してしまった事例あり。該当PRは即クローズ済み)。
