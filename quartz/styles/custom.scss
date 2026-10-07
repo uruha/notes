@@ -1,3 +1,17 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// @quartz-themes/core の default テーマは --secondary / --tertiary を
+// `hsl(calc(...))` 形式で定義するが、Mermaid (khroma) はこの形式を解釈できず
+// 初期化時に例外を投げて図が描画されない。同じ色を解釈可能な値で上書きする。
+// テーマ側のセレクタ (:root:root / :root:root[saved-theme]) より詳細度を上げている。
+:root:root:root {
+  --secondary: #8a5cf5;
+  --tertiary: #a68af9;
+}
+
+:root:root:root[saved-theme="dark"] {
+  --secondary: #a68af9;
+  --tertiary: #c5b6fc;
+}
